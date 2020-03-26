@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 void main() {
-//  runApp(MaterialApp(
-//    title: "Exploring UI Widgets",
-//    home: Scaffold(
-//      appBar: AppBar(title: Text("ListView Example"),),
-//      body: getListElements()
-//      //      body: getListView()
-//    ),
-//  ));
   runApp(MaterialApp(
     title: "Exploring ListView",
     home: Scaffold(
-        appBar: AppBar(
-          title: Text("ListView Example"),
-        ),
-        body: getListView()),
+      appBar: AppBar(
+        title: Text("ListView Example"),
+      ),
+      body: getListView(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          debugPrint("clicked Fab");
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Add more item',
+      ),
+    ),
   ));
 }
 
@@ -50,7 +50,7 @@ void main() {
 //}
 
 List<String> getListElements() {
-  var item = List<String>.generate(1000, (counter) => "item $counter");
+  var item = List<String>.generate(999, (counter) => "item ${counter+1}");
   return item;
 }
 
@@ -61,11 +61,38 @@ Widget getListView() {
     return ListTile(
       leading: Icon(Icons.arrow_right),
       title: Text(listElements[index]),
-      onTap: (){
-        debugPrint('Tapped ${listElements[index]}');
+      onTap: () {
+        showSnakBar(context, listElements[index],"You clicked");
+      //  alertDialod(context, listElements[index]);
       },
     );
   });
 
   return listView;
+}
+
+void showSnakBar(BuildContext context, String type,String title) {
+  var snackBAr = SnackBar(
+    content: Text("${title} ${type}"),
+    action: SnackBarAction(
+      label: "Undo",
+      onPressed:(){
+        var titles="you revert";
+        showSnakBar(context, type,titles);
+      } ,
+    ),
+  );
+
+  Scaffold.of(context).showSnackBar(snackBAr);
+}
+
+void alertDialod(BuildContext context, String type) {
+  var alert = AlertDialog(
+    title: Text("You have pressed  $type"),
+  );
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      });
 }
